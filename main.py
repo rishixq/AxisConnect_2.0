@@ -37,6 +37,11 @@ class ChatRequest(BaseModel):
     employee_profile: dict
     history: List[ChatMessage]
 
+@app.get("/")
+def health():
+    return {"status": "AxisConnect backend running"}
+
+
 
 # ---------- Login ----------
 @app.post("/login")
