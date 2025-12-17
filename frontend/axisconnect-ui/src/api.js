@@ -3,8 +3,9 @@ const API_BASE_URL =  process.env.REACT_APP_API_BASE_URL || "http://localhost:80
 /**
  * Login API
  * @param {string} employeeCode
+ * @param {string} email
  */
-export async function login(employeeCode) {
+export async function login(employeeCode,email) {
   const response = await fetch(`${API_BASE_URL}/login`, {
     method: "POST",
     headers: {
@@ -12,6 +13,7 @@ export async function login(employeeCode) {
     },
     body: JSON.stringify({
       employee_code: employeeCode,
+      email: email,
     }),
   });
 

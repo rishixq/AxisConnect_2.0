@@ -2,7 +2,8 @@ import { useState } from "react";
 import ChatBubble from "./components/ChatBubble";
 import Sidebar from "./components/Sidebar";
 
-const API_BASE = "http://127.0.0.1:8000";
+import { login, chat } from "./api";
+
 
 
 
@@ -34,24 +35,16 @@ function App() {
   const handleLogin = async () => {
     setError("");
     try {
-      const res = await fetch(`${API_BASE}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ employee_code: employeeCode,email: email }),
-      });
+      const profile = await login(employeeCode, email);
+        setEmployeeProfile(profile);
+        setMessages([]);
+        setChatHistory([]);
 
-      if (!res.ok) throw new Error("Login failed");
-
-      const profile = await res.json();
-      
-      setEmployeeProfile(profile);
-
-      setMessages([]);
-
-      setChatHistory([]);
-    } catch {
+      } catch (err) {
       setError("Invalid employee code or email. Try again");
     }
+
+    
   };
   const handleLogout = () => {
   setEmployeeProfile(null);
@@ -71,7 +64,7 @@ function App() {
     if (!input.trim()) return;
 
     const userMsg = { role: "user", content: input };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
 
     const newHistory = [...chatHistory, userMsg];
@@ -79,29 +72,20 @@ function App() {
     try {
       setIsTyping(true);
 
-      const res = await fetch(`${API_BASE}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: userMsg.content,
-          employee_profile: employeeProfile,
-          history: newHistory
-        })
-      });
+      const data = await chat(
+        userMsg.content,
+        employeeProfile,
+        newHistory
+      );
 
-      if (!res.ok) throw new Error();
-
-      const data = await res.json();
       const aiMsg = { role: "ai", content: data.reply };
 
-      setMessages(prev => [...prev, aiMsg]);
+      setMessages((prev) => [...prev, aiMsg]);
       setChatHistory([...newHistory, aiMsg]);
       setIsTyping(false);
-
     } catch {
       setIsTyping(false);
-
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         { role: "ai", content: "⚠️ Axis is temporarily unavailable." }
       ]);
