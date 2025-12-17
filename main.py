@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-
 from assistant import Assistant
 from prompts import SYSTEM_PROMPT
 from app_state import get_llm, get_vector_store
@@ -40,6 +39,12 @@ class ChatRequest(BaseModel):
 @app.get("/")
 def health():
     return {"status": "AxisConnect backend running"}
+@app.on_event("startup")
+def warmup():
+    get_vector_store()
+
+
+
 
 
 
@@ -80,8 +85,8 @@ def chat(request: ChatRequest):
 
         assistant.employee_information = request.employee_profile or {}
 
-        chain = assistant.build_chain()
-        reply = chain.invoke(request.message)
+        reply = assistant.get_response(request.message)
+
 
         return {"reply": reply}
 
