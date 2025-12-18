@@ -25,7 +25,7 @@ engine = create_engine(
     max_overflow=10,
     pool_timeout=30,
     pool_pre_ping=True,
-    pool_recycle=300
+    pool_recycle=300,
     echo=False
 )
 
