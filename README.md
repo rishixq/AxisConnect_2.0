@@ -1,161 +1,150 @@
-# 🚀 AxisConnect — AI-Powered Employee Self Service (ESS) Chatbot
+# 🚀 AxisConnect — AI-Powered Employee Self-Service (ESS) Chatbot
 
-AxisConnect is an intelligent Employee Self-Service assistant built using **Streamlit**, **Groq LLaMA**, and **RAG (Retrieval-Augmented Generation)**.
-It allows employees to log in, view their details, access HR policies, and interact with an AI assistant that understands both company documents and real employee records.
+AxisConnect is an **AI-powered Employee Self-Service (ESS) chatbot** built with a **FastAPI backend** and a **React frontend**, using **Retrieval-Augmented Generation (RAG)** and a **Large Language Model (LLM)** to deliver personalized HR assistance.
 
-This project combines **LLM-powered chat**, **database-backed employee profiles**, and **PDF policy retrieval** to create a realistic ESS chatbot experience.
-
----
-
-## 🔥 Demo Video
-
-🎥 **Watch the full project demo:**
-👉 [https://youtu.be/3CkXnIZRWB4](https://youtu.be/3CkXnIZRWB4)
+It enables employees to log in, view their profile, and ask HR or policy-related questions with responses grounded in **company policy documents** and **employee database records**.
 
 ---
 
 ## 🔥 Key Features
 
-### ✅ **Employee Login System**
+### ✅ Employee Login
 
-* Secure login using Employee Code.
-* Profile card showing:
+* Secure login using **Employee Code** and **Employee Email**
+* Fetches employee profile from database
+* Displays role, department, joining date, salary, leave, assets, and goals
 
-  * Name
-  * Employee ID
-  * Department
-  * Role
-  * Joining Date
+---
 
-### ✅ **AI Chat Assistant (Axis)**
+### ✅ AI Chat Assistant (“Axis”)
 
-* Powered by **Groq LLaMA 3.1 8B Instant**
-* Remembers chat context
-* Responds using:
+* Powered by **Groq LLaMA 3.1 (8B Instant)**
+* Context-aware conversation
+* Combines:
 
-  * HR policy documents (RAG)
-  * Logged-in employee’s details
+  * Employee-specific data
+  * Company HR policy documents (RAG)
 
-### ✅ **RAG (Retrieval-Augmented Generation)**
+---
 
-* Loads and processes HR policy PDFs
-* Splits documents → embeds text → stores in ChromaDB
-* Produces accurate, context-aware answers
+### ✅ Retrieval-Augmented Generation (RAG)
 
-### ✅ **Quick Action Buttons**
+* Loads HR policy PDFs
+* Splits documents into chunks
+* Embeds and stores them in **ChromaDB (in-memory)**
+* Retrieves top relevant chunks per query
+* Prevents hallucination by grounding answers in documents
 
-* Apply Leave
-* View Salary Details
-* View IT Assets
-* Check Goals
-* HR Policies
-  Each triggers a predefined system prompt.
+---
 
-### ✅ **Modern UI**
+### ✅ Modern Full-Stack Architecture
 
-* Clean sidebar design
-* Employee card
-* Smooth chat interface
-* Custom theme via `gui.py`
+* **Backend**: FastAPI (REST APIs)
+* **Frontend**: React
+* **Database**: PostgreSQL (via SQLAlchemy)
+* **Vector Store**: ChromaDB
+* **LLM**: Groq API
 
 ---
 
 ## 🧠 Technology Stack
 
-### **AI / NLP**
-
-* Groq LLaMA 3.1 8B Instant
-* LangChain
-* ChromaDB
-* MiniLM-L6-v2 Embeddings
-
-### **Frontend**
-
-* Streamlit
-* Custom CSS Styling
-
 ### **Backend**
 
 * Python
+* FastAPI
 * SQLAlchemy ORM
-* Supabase / PostgreSQL
+* PostgreSQL (Supabase compatible)
+* LangChain
+* ChromaDB
+* Groq LLaMA 3.1
 
-### **Document Processing**
+### **Frontend**
 
-* PyPDF
-* LangChain PDF Loader
-* Recursive text splitter
+* React
+* Fetch-based API communication
+* Environment-based backend configuration
+
+### **AI / NLP**
+
+* LangChain RAG pipeline
+* HuggingFace embeddings (via `langchain-huggingface`)
+* Groq LLM API
 
 ---
 
 ## 📁 Project Structure
 
 ```
-AxisConnect/
+AxisConnect1/
 │
-├── .env                     # Environment variables (ignored by Git)
-├── .gitignore
-├── .python-version
-├── app.py                  # Main Streamlit application
-├── assistant.py            # LLM conversation chain logic
-├── database.py             # SQLAlchemy DB connection + engine
-├── gui.py                  # Chat UI components + styling
-├── models.py               # ORM Models (Employee, etc.)
-├── prompts.py              # System prompts + welcome message
-├── pyproject.toml
-├── readme.md               # Project documentation
-├── requirements.txt
-├── seed_data.py            # Script to insert sample employee data
+├── Axis/
+│   ├── main.py              # FastAPI application entry point
+│   ├── app_state.py         # Singleton LLM, embeddings & vector store
+│   ├── assistant.py         # RAG + LLM orchestration logic
+│   ├── database.py          # SQLAlchemy engine & session
+│   ├── models.py            # ORM models (Employee, Salary, Leave, etc.)
+│   ├── prompts.py           # System & chat prompts
+│   ├── seed_data.py         # Seed script for sample employee data
 │
-├── data/
-│   ├── employees.py                    # Employee seed data (Python)
-│   ├── umbrella_corp_policies.pdf      # HR Policy PDF (used for RAG)
-│   ├── vectorstore/                    # ChromaDB persisted index
-│   │     ├── chroma.sqlite3
-│   │     ├── *.bin
-│   │     ├── *.pickle
-│   │     └── (auto-generated files)
-│   └── __pycache__/
+│   ├── services/
+│   │   └── employee_service.py   # Employee profile aggregation logic
 │
-└── services/
-    ├── employee_service.py             # Employee profile aggregation logic
-    └── __pycache__/
-```
-
-✔ Matches your VS Code
-✔ Nothing removed
-✔ Perfect for GitHub & resume
-
----
-
-## ⚙️ Environment Variables (`.env`)
-
-```
-GROQ_API_KEY=your_groq_key
-SUPABASE_DB_URL=your_postgres_url
-SUPABASE_DB_PASSWORD=your_password
+│   ├── data/
+│   │   └── *.pdf                 # HR policy documents
+│
+│   ├── frontend/                 # React frontend
+│
+│   ├── requirements.txt
+│   ├── .env                      # Environment variables (ignored)
+│   └── README.md
 ```
 
 ---
+-
 
-## 🛠️ Local Setup Instructions
 
-```
-git clone <repo>
-cd AxisConnect
 
+## 🛠️ Local Setup
+
+### 1️⃣ Backend
+
+```bash
+cd Axis
+python -m venv venv
+venv\Scripts\activate   # Windows
 pip install -r requirements.txt
-# or using UV
-uv sync
-
-streamlit run app.py
+uvicorn main:app --reload
 ```
 
 ---
 
-## 🧑‍💻 Author
+### 2️⃣ Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+
+
+## 🎯 Project Highlights (Interview-Ready)
+
+* Full-stack AI application (React + FastAPI)
+* Real RAG implementation (not just prompt stuffing)
+* Token-safe prompt construction
+* Scalable backend design
+* Production-oriented architecture
+* Clear separation of concerns
+
+---
+
+## 👤 Author
 
 **Rishi**
-AI ESS Chatbot Developer
+AI & Full-Stack Developer
 
----.
+---
+
+
