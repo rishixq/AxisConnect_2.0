@@ -46,6 +46,11 @@ It enables employees to log in, view their profile, and ask HR or policy-related
 * **LLM**: Groq API
 
 ---
+## 🎥 Demo Video
+
+Watch the full working demo of AxisConnect here:  
+👉 https://youtu.be/2UdMtwAa0mI
+
 
 ## 🧠 Technology Stack
 
