@@ -51,6 +51,12 @@ It enables employees to log in, view their profile, and ask HR or policy-related
 Watch the full working demo of AxisConnect here:  
 👉 https://youtu.be/2UdMtwAa0mI
 
+## Screenshots
+
+<img width="1888" height="903" alt="AC3 0" src="https://github.com/user-attachments/assets/4e5779b6-cf0d-4a74-9593-4b7704eb3492" />
+<img width="1880" height="897" alt="AC2 0" src="https://github.com/user-attachments/assets/4c9ddd03-4980-46ee-b95d-d7c2ef570d02" />
+
+
 
 ## 🧠 Technology Stack
 
